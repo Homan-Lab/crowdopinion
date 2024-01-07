@@ -81,7 +81,8 @@ def read_labels_json(fdict, data):
     #output = {}
     output = defaultdict(list)
     for item in data:
-        vect = vectorize(fdict, item["labels"])
+        # vect = vectorize(fdict, item["labels"])
+        vect = list(item["labels"].values()) #list conversion through vectorize without frills
         item["message_id"] = int(item["message_id"])
         output[item["message_id"]] = vect
     return output
