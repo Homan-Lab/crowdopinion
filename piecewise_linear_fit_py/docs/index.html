@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pwlf: piecewise linear fitting &#8212; pwlf 1.1.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="pwlf-piecewise-linear-fitting">
+<h1>pwlf: piecewise linear fitting<a class="headerlink" href="#pwlf-piecewise-linear-fitting" title="Permalink to this headline">¶</a></h1>
+<p>Fit piecewise linear functions to data!</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#fit-with-known-breakpoint-locations">fit with known breakpoint locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#fit-for-specified-number-of-line-segments">fit for specified number of line segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#fitfast-for-specified-number-of-line-segments">fitfast for specified number of line segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#force-a-fit-through-data-points">force a fit through data points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#use-custom-optimization-routine">use custom optimization routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#pass-differential-evolution-keywords">pass differential evolution keywords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#find-the-best-number-of-line-segments">find the best number of line segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#model-persistence">model persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#bad-fits-when-you-have-more-unknowns-than-data">bad fits when you have more unknowns than data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#fit-with-a-breakpoint-guess">fit with a breakpoint guess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#get-the-linear-regression-matrix">get the linear regression matrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#use-of-tensorflow">use of tensorflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#fit-constants-or-polynomials">fit constants or polynomials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#specify-breakpoint-bounds">specify breakpoint bounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#non-linear-standard-errors-and-p-values">non-linear standard errors and p-values</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pwlf.html">pwlf package contents</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">pwlf</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pwlf.html">pwlf package contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Charles Jekel.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.0+/9f81d05</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-67542734-2']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>
