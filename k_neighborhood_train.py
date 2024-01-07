@@ -20,11 +20,10 @@ import argparse
 import sys
 import pdb
 from mongo_utils import retrive_model_from_sampling_db
-from cf_csv_preprocess import save_to_json
 from model_evaluation import KL_PMI_empirical2pred
 from ldl_utils import get_data_dict, vectorize,read_json
 from tqdm import tqdm
-from helper_functions import get_feature_vectors_NBP,compile_tweet_dict,create_folder,KLdivergence,read_labeled_data_NBP,generate_pd,read_json_log
+from helper_functions import get_feature_vectors_NBP,compile_tweet_dict,create_folder,KLdivergence,read_labeled_data_NBP,generate_pd,read_json_log,save_to_json_foldercheck
 from helper_functions_LSTM_TF import build_labels_dict,plot_KN_history
 from helper_functions_nlp import clean_text_for_sklean,build_bag_of_words,data_in_cluster_sklearn,save_trained_model_joblib_sklearn_nlp,build_glove_embed,glove_embed_vects,hybrid_flag,text_hybrid_labels
 
@@ -161,7 +160,7 @@ def train_NBP(train_answer_counters,dev_answer_counters,min_epsilon,max_epsilon,
 
 	results_to_write["results"] = results
 	results_to_write["measure"] = measure
-	save_to_json(results_to_write,folder_name+"/"+output_name+"_NBP_results.json")
+	save_to_json_foldercheck(results_to_write,folder_name+"/"+output_name+"_NBP_results.json")
 	plot_KN_history(epsilon_values,results_KL,measure,folder_name,output_name)
 
 	model_epsilon = model_selection(epsilon_values,results_KL)
@@ -309,23 +308,23 @@ def main():
 			test_vectors = text_hybrid_labels(test_vectors,test_answer_counters,float(hybrid))
 		
 		train_predictions = neighborhood_predict_nlp(train_answer_counters,train_answer_counters,model_epsilon_value,label_dict,train_message_dict,train_vectors,train_vectors,measure)
-		save_to_json(train_predictions,args.folder_name+"/"+args.output_file+"_predict_train.json")
+		save_to_json_foldercheck(train_predictions,args.folder_name+"/"+args.output_file+"_predict_train.json")
 
 		dev_predictions = neighborhood_predict_nlp(train_answer_counters,dev_answer_counters,model_epsilon_value,label_dict,dev_message_dict,train_vectors,dev_vectors,measure)
-		save_to_json(dev_predictions,args.folder_name+"/"+args.output_file+"_predict_dev.json")
+		save_to_json_foldercheck(dev_predictions,args.folder_name+"/"+args.output_file+"_predict_dev.json")
 	
 		test_predictions = neighborhood_predict_nlp(train_answer_counters,test_answer_counters,model_epsilon_value,label_dict,test_message_dict,train_vectors,test_vectors,measure)
-		save_to_json(test_predictions,args.folder_name+"/"+args.output_file+"_predict_test.json")
+		save_to_json_foldercheck(test_predictions,args.folder_name+"/"+args.output_file+"_predict_test.json")
 
 	else:
 		train_predictions = neighborhood_predict(train_answer_counters,train_answer_counters,model_epsilon_value,label_dict,train_message_dict,measure)
-		save_to_json(train_predictions,args.folder_name+"/"+args.output_file+"_predict_train.json")
+		save_to_json_foldercheck(train_predictions,args.folder_name+"/"+args.output_file+"_predict_train.json")
 
 		dev_predictions = neighborhood_predict(train_answer_counters,dev_answer_counters,model_epsilon_value,label_dict,dev_message_dict,measure)
-		save_to_json(dev_predictions,args.folder_name+"/"+args.output_file+"_predict_dev.json")
+		save_to_json_foldercheck(dev_predictions,args.folder_name+"/"+args.output_file+"_predict_dev.json")
 
 		test_predictions = neighborhood_predict(train_answer_counters,test_answer_counters,model_epsilon_value,label_dict,test_message_dict,measure)
-		save_to_json(test_predictions,args.folder_name+"/"+args.output_file+"_predict_test.json")
+		save_to_json_foldercheck(test_predictions,args.folder_name+"/"+args.output_file+"_predict_test.json")
 
 
 

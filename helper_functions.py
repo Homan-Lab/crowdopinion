@@ -504,6 +504,13 @@ def save_to_json(output_file,data_to_write):
         json.dump(data_to_write, fp, sort_keys=True, indent=4)
     print ("Saved to "+output_file)
 
+def save_to_json_foldercheck(data,outputdir):
+    if not os.path.exists(os.path.dirname(outputdir)):
+        os.makedirs(os.path.dirname(outputdir))
+    with open(outputdir, 'w') as outfile:
+        outfile.write(json.dumps(data, indent=4))
+        #print ("JSON file saved to "+outputdir)
+
 def copy_json_files(original_file,output_file):
     src_data = read_json(original_file)
     save_to_json(output_file,src_data)

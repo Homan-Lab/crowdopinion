@@ -9,10 +9,9 @@ import os, math, sys, json, collections
 from scipy.stats import entropy
 import numpy as np
 import joblib
-from cf_csv_preprocess import save_to_json
 from ldl_utils import read_json
 from label_vectorization import get_ans_pct_vectors,get_assignments
-from helper_functions import read_labeled_data_KMeans,generate_pd,map_probability_to_label,generate_topics_dict,transform_for_lda
+from helper_functions import read_labeled_data_KMeans,generate_pd,map_probability_to_label,generate_topics_dict,transform_for_lda,save_to_json_foldercheck
 from helper_functions_nlp import clean_text_for_sklean,build_bag_of_words,data_in_cluster_sklearn,prep_tokens_for_doc2vec,embed_to_vect,text_hybrid_labels,glove_embed_vects,hybrid_flag,transform_bert_for_lda
 # from mongo_utils import retrive_model_from_sampling_db
 import argparse
@@ -140,7 +139,7 @@ def main():
         predictions = lda_predict_nlp(answer_counters,message_dict,label_dict,model_path,cluster_info,glove,hybrid,file_to_predict_vects,embeddings)    
     else:
         predictions = lda_predict(answer_counters,message_dict,label_dict,model_path)
-    save_to_json(predictions,output_file)
+    save_to_json_foldercheck(predictions,output_file)
 
 
 if __name__ == '__main__':

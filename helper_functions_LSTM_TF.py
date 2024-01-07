@@ -27,7 +27,7 @@ from collections import defaultdict,OrderedDict
 from gensim.models import LdaModel #https://radimrehurek.com/gensim/utils.html#gensim.utils.SaveLoad.load
 
 import shutil #copy lda max model to final folder
-from cf_csv_preprocess import save_to_json
+from helper_functions import save_to_json_foldercheck
 import datetime
 import pandas as pd
 import wandb
@@ -232,7 +232,7 @@ def write_predictions_to_json(predictions,data_dict,label_dict,output):
         predictions_to_write.append(OrderedDict([("message_id", message_id),("message", message),("labels", labels)]))
     data_to_write['dictionary'] = label_dict
     data_to_write['data'] = predictions_to_write
-    save_to_json(data_to_write,output)
+    save_to_json_foldercheck(data_to_write,output)
 
 def write_predictions_to_json_cnn(predictions,data_dict,label_dict,output):
     data_to_write = {}
@@ -243,7 +243,7 @@ def write_predictions_to_json_cnn(predictions,data_dict,label_dict,output):
         predictions_to_write.append(OrderedDict([("message_id", message_id),("message", message),("labels", labels)]))
     data_to_write['dictionary'] = label_dict
     data_to_write['data'] = predictions_to_write
-    save_to_json(data_to_write,output)
+    save_to_json_foldercheck(data_to_write,output)
 
 def keras_feature_prep(texts,MAX_NB_WORDS,MAX_SEQUENCE_LENGTH):
 

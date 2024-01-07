@@ -11,9 +11,8 @@ import pdb
 import numpy as np
 from numpy import argmax, dot
 from collections import defaultdict,OrderedDict
-from cf_csv_preprocess import save_to_json
 from ldl_utils import get_data_dict, get_feature_vectors, vectorize,read_json,compile_tweet_dict,save_label_dict,load_label_dict,save_label_vects,load_label_vects
-from helper_functions import data_prep_bnpy,save_bnpy_model,load_bnpy_model,build_prob_distribution,map_probability_to_label,generate_topics_dict,create_folder
+from helper_functions import data_prep_bnpy,save_bnpy_model,load_bnpy_model,build_prob_distribution,map_probability_to_label,generate_topics_dict,create_folder,save_to_json_foldercheck
 from FMM_utils import get_assignments,language_prep_bnpy
 import pickle
 import argparse
@@ -207,7 +206,7 @@ def bnpy_write_predicitions(tweetid_answer_counters,predictions,cluster_assignme
     data_to_write["data"] = predictions_to_write
     data_to_write["dictionary"] = choices.values()
     data_to_write['topics_dict'] = generate_topics_dict(info_dict['Centroids'])
-    save_to_json(data_to_write,path_to_save)
+    save_to_json_foldercheck(data_to_write,path_to_save)
 
 def main():
     parser = argparse.ArgumentParser()

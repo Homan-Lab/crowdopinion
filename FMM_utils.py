@@ -7,8 +7,7 @@ import pdb
 import numpy as np
 from numpy import argmax, dot
 from collections import defaultdict,OrderedDict
-from cf_csv_preprocess import save_to_json
-from helper_functions import data_prep_bnpy,save_bnpy_model,load_bnpy_model,build_prob_distribution,map_probability_to_label,generate_topics_dict
+from helper_functions import data_prep_bnpy,save_bnpy_model,load_bnpy_model,build_prob_distribution,map_probability_to_label,generate_topics_dict,save_to_json_foldercheck
 from helper_functions_nlp import clean_text_for_sklean,build_bag_of_words,data_in_cluster_sklearn,save_trained_model_joblib_sklearn_nlp,prep_tokens_for_doc2vec,embed_to_vect,build_glove_embed,glove_embed_vects,text_hybrid_labels,hybrid_flag
 
 
@@ -93,7 +92,7 @@ def bnpy_predict(tweetid_answer_counters, choices, n_clusters, message_dict, pat
     data_to_write["data"] = predictions_to_write
     data_to_write["dictionary"] = choices.values()
     data_to_write['topics_dict'] = generate_topics_dict(info_dict['Centroids'])
-    save_to_json(data_to_write,path_to_save)
+    save_to_json_foldercheck(data_to_write,path_to_save)
 
     #models_dir = folder + '/gamma0=' + str(FMM_DPMM_Gamma) + '/' + target
     #bnpy_model_selection(trn_dataset,models_dir,tweetid_answer_counters,choices.values(),message_dict,output_name,target)

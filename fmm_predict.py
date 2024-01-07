@@ -10,11 +10,10 @@ import pdb
 from FMM_utils import bnpy_predict
 from ldl_utils import get_data_dict, get_feature_vectors, vectorize,read_json,compile_tweet_dict,save_label_dict,load_label_dict,save_label_vects,load_label_vects
 from collections import defaultdict #https://stackoverflow.com/questions/5900578/how-does-collections-defaultdict-work
-from helper_functions import create_folder
+from helper_functions import create_folder,save_to_json_foldercheck
 import pickle
 import argparse
 # from mongo_utils import retrive_model_from_sampling_db
-from cf_csv_preprocess import save_to_json
 
 #Constants for LDA Data
 ITERATIONS = 100
@@ -47,13 +46,13 @@ def FMM_preprocess(clusters,input_file_name, output_file_name,nlp_flag):
 
 def FMM_predict_sampled(folder_name,output_folder,filename):
     train_file = read_json(folder_name+"/"+filename+"_train.json")
-    save_to_json(train_file,output_folder+"/"+filename+"_train.json")
+    save_to_json_foldercheck(train_file,output_folder+"/"+filename+"_train.json")
 
     dev_file = read_json(folder_name+"/"+filename+"_dev.json")
-    save_to_json(dev_file,output_folder+"/"+filename+"_dev.json")
+    save_to_json_foldercheck(dev_file,output_folder+"/"+filename+"_dev.json")
 
     test_file = read_json(folder_name+"/"+filename+"_test.json")
-    save_to_json(test_file,output_folder+"/"+filename+"_test.json")
+    save_to_json_foldercheck(test_file,output_folder+"/"+filename+"_test.json")
 
 def main():
     parser = argparse.ArgumentParser()
