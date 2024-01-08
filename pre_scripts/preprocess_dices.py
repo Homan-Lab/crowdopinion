@@ -7,7 +7,7 @@ import json
 import argparse
 import os
 import numpy as np
-from helper_functions_data import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,save_to_json,create_folder
+from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,save_to_json,create_folder,move_disco_embed_to_co
 #from sentence_transformers import SentenceTransformer
 import sys
 sys.path.insert(0, 'utils/')
@@ -18,28 +18,7 @@ import random
 from sklearn.model_selection import train_test_split
 use_original_splits = False
 
-# from ldl_utils import read_json
-# from split_data import split_items_train_dev_test
-# from helper_functions import read_original_split,generate_pd,get_feature_vectors,compile_tweet_dict,get_data_dict
-
-#python3 preprocess_political.py --input_MT_raw_file datasets/PP/pp_annotator_level_processed_0_2020.xlsx --colTweetID comment_id --colTweetText message --id PP --foldername1 datasets/PP/processed/modeling_annotator --foldername2 datasets/PP/processed/modeling_annotator_nn --foldername3 datasets/PP/processed/pldl
-#python3 preprocess_political_person.py --input_MT_raw_file datasets/PP/oct_14_cleaned_0_2020.xlsx --colTweetID comment_id --colTweetText message --id PP --foldername1 datasets/PP/Maj/modeling_annotator --foldername2 datasets/PP/Maj/modeling_annotator_nn --foldername3 datasets/PP/Maj/pldl
-
-
-# Full python goemotion_preprocess.py --input_MT_raw_file1 datasets/GoEmotions/original_splits/raw_data/goemotions_1.csv --input_MT_raw_file2 datasets/GoEmotions/original_splits/raw_data/goemotions_2.csv --input_MT_raw_file3 datasets/GoEmotions/original_splits/raw_data/goemotions_3.csv --input_MT_file_dev datasets/GoEmotions/original_splits/dev.tsv --input_MT_file_train datasets/GoEmotions/original_splits/train.tsv --input_MT_file_test datasets/GoEmotions/original_splits/test.tsv  --colTweetID id --colTweetText text --id goemotions --foldername1 datasets/GoEmotionsFull --foldername2 /home/cyril/DataDrive/Experiments/pldl/modeling_annotators_NN/datasets/GoEmotionsFull --foldername3 /home/cyril/DataDrive/Experiments/pldl/experimental_code/data/goemotionsFull
-# Sub python goemotion_preprocess.py --input_MT_raw_file1 datasets/GoEmotions/original_splits/raw_data/goemotions_1.csv --input_MT_raw_file2 datasets/GoEmotions/original_splits/raw_data/goemotions_2.csv --input_MT_raw_file3 datasets/GoEmotions/original_splits/raw_data/goemotions_3.csv --input_MT_file_dev datasets/GoEmotions/original_splits/dev.tsv --input_MT_file_train datasets/GoEmotions/original_splits/train.tsv --input_MT_file_test datasets/GoEmotions/original_splits/test.tsv  --colTweetID id --colTweetText text --id goemotions --foldername1 datasets/GoEmotions/processed/modeling_annotator --foldername2 /home/cyril/DataDrive/Experiments/pldl/modeling_annotators_NN/datasets/GoEmotions --foldername3 /home/cyril/DataDrive/Experiments/pldl/experimental_code/data/goemotions
-
-
 def main():
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("--input_MT_raw_file", help="Input messages raw CSV file 1")
-    # parser.add_argument("--colTweetID", help="Tweet ID columm name for CSV", default="comment_id")
-    # parser.add_argument("--colTweetText", help="Tweet text column name for CSV", default = "comment_text")
-    # parser.add_argument("--id", help="Identifier",default="PP")
-    # parser.add_argument("--foldername1", help="Main Folder name", default = "datasets/PP/processed/modeling_annotator")
-    # parser.add_argument("--foldername2", help="Main Folder name", default = "datasets/PP/processed/modeling_annotator_nn")
-    # parser.add_argument("--foldername3", help="Main Folder name", default = "datasets/PP/processed/pldl")
-    # args = parser.parse_args()
 
     raw_input_file = "datasets/dices_dataset/990/diverse_safety_adversarial_dialog_990.csv"
     raw_input_file = "datasets/dices_dataset/990ct/diverse_safety_adversarial_dialog_990_ct.csv"
@@ -121,28 +100,19 @@ def main():
 
     path = foldername1 + "/"+_id +"_annotations.json"
     ds_df.to_json(path,orient='split')
-    # pdb.set_trace()
-    # path = foldername2 + "/" + _id + "_complete_with_id.json"
-    # dfs_combine.to_json(path,orient='split')
     
     dfs_dev = dfs_combine[dfs_combine.comment_id.isin(dev_items)]
     path = foldername3 + "/" + _id + "_dev.json"
     convert_data_pldl_experiments(dfs_dev,colLabels,'Mindex',path)
-    # generate_data_nn(dfs_dev,foldername2,"dev",label_dict,_id)
     
     dfs_train = dfs_combine[dfs_combine.comment_id.isin(train_items)]
     path = foldername3 + "/" + _id + "_train.json"
     convert_data_pldl_experiments(dfs_train,colLabels,'Mindex',path)
-    # generate_data_nn(dfs_train,foldername2,"train",label_dict,_id)
-
+    
     dfs_test = dfs_combine[dfs_combine.comment_id.isin(test_items)]
     path = foldername3 + "/" + _id + "_test.json"
     convert_data_pldl_experiments(dfs_test,colLabels,'Mindex',path)
-    # generate_data_nn(dfs_test,foldername2,"test",label_dict,_id)
-
-    # train_items_nn = train_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # test_items_nn = test_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # dev_items_nn = dev_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
+    
     annotators_parsed = pd.unique(dfs_combine['Aindex'])
     annotators_parsed = pd.DataFrame(annotators)
     annotators_parsed = annotators_parsed.rename(columns={0:'id'})
@@ -155,7 +125,7 @@ def main():
     generate_data_bert(dfs_train,foldername2,"train",label_dict,_id,X_train,annotators_array)
     generate_data_bert(dfs_test,foldername2,"test",label_dict,_id,X_test,annotators_array)
     generate_data_bert(dfs_dev,foldername2,"dev",label_dict,_id,X_dev,annotators_array)
-
+    move_disco_embed_to_co(foldername2,foldername3)
 
 def row_values_counter(colname,data_rows_pp):
     label_counts_sub = Counter(data_rows_pp[colname])

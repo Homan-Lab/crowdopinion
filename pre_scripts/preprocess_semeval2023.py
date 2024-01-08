@@ -7,7 +7,7 @@ import json
 import argparse
 import os
 import numpy as np
-from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder,read_json
+from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder,read_json,move_disco_embed_to_co
 #from sentence_transformers import SentenceTransformer
 import sys
 sys.path.insert(0, 'utils/')
@@ -66,16 +66,7 @@ def main():
     dfs_combine.to_json(path,orient='split')
     
     label_dict = {index : colLabels[index] for index in range(0,len(colLabels))}
-    # dfs_combine['label'] = dfs_combine['label'].astype('category')
-    # dfs_combine['label_vector'] = dfs_combine['label'].cat.codes
-    # cats = dfs_combine.label.astype('category')
-    # list_of_cats = dict(enumerate(cats.cat.categories))
-    # annotators = pd.unique(dfs_combine["annotator_id"])
-    # dfs_combine = dfs_combine.rename(columns = {'text':'message'})
-    # data_items = pd.unique(dfs_combine['comment_id'])
 
-    # path = foldername1 + "/"+_id +"_annotations.json"
-    # dfs_combine.to_json(path,orient='split')
 
     dfs_train = train_raw_df
     dfs_dev = dev_raw_df
@@ -84,15 +75,6 @@ def main():
     dfs_train = rename_df_embedding(dfs_train)
     dfs_test = rename_df_embedding(dfs_test)
     dfs_dev = rename_df_embedding(dfs_dev)
-    # train_items,dev_items = train_test_split(data_items,test_size=0.4)
-    # dev_items,test_items = train_test_split(dev_items,test_size=0.5)
-    # dev_items,train_items,test_items = read_splits(dev_input_file, train_input_file, test_input_file)
-    # import pdb
-    # pdb.set_trace()
-    # if use_original_splits==False:
-    #     train_items = random.sample(train_items,1000)
-    #     test_items = random.sample(test_items,500)
-    #     dev_items = random.sample(dev_items,500)
 
     # dfs_dev = dfs_combine[dfs_combine.comment_id.isin(dev_items)]
     path = foldername1 + "/" + _id + "_dev.json"
@@ -107,50 +89,15 @@ def main():
     dfs_test.to_json(path,orient='split',index=False)
 
 
-    # annotators_parsed = pd.DataFrame(annotators)
-    # annotators_parsed = annotators_parsed.rename(columns={0:'id'})
-    # annotators_parsed['Aindex'] = annotators_parsed.index
-    # # annotators_parsed = [{x:annotators[x]} for x in range(len(annotators))] #Int indexes 
-    # dfs_combine = dfs_combine.join(annotators_parsed.set_index('id'), on=worker_id_mt)
 
-    # unique_dataitems = pd.unique(dfs_combine['comment_id'])
-    # unique_dataitems_parsed = pd.DataFrame(unique_dataitems)
-    # unique_dataitems_parsed = unique_dataitems_parsed.rename(columns={0:'id'})
-    # unique_dataitems_parsed['Mindex'] = unique_dataitems_parsed.index
-    # dfs_combine = dfs_combine.join(unique_dataitems_parsed.set_index('id'), on='comment_id')
-    # # data_items_parsed = [{x:unique_dataitems[x]} for x in range(len(unique_dataitems))]
-
-    # ds_df = dfs_combine
-    # # ds_df = ds_df.drop([col_tweet_ID,worker_id_mt],axis=1)
-    # # ds_df = ds_df.rename(columns={"Aindex":worker_id_mt,"Mindex":col_tweet_ID})
-    # ds_df = ds_df[['comment_id',worker_id_mt,'label','message','label_vector']]
-
-    # path = foldername1 + "/"+_id +"_annotations.json"
-    # ds_df.to_json(path,orient='split')
-    # pdb.set_trace()
-    # path = foldername2 + "/" + _id + "_complete_with_id.json"
-    # dfs_combine.to_json(path,orient='split')
-    # dfs_dev = dfs_combine[dfs_combine.comment_id.isin(dev_items)]
     path = foldername3 + "/" + _id + "_dev.json"
     convert_data_pldl_experiments(dfs_dev,colLabels,'comment_id',path)
-    # generate_data_nn(dfs_dev,foldername2,"dev",label_dict,_id)
-    
-    # dfs_train = dfs_combine[dfs_combine.comment_id.isin(train_items)]
+
     path = foldername3 + "/" + _id + "_train.json"
     convert_data_pldl_experiments(dfs_train,colLabels,'comment_id',path)
-    # generate_data_nn(dfs_train,foldername2,"train",label_dict,_id)
-
-    # dfs_test = dfs_combine[dfs_combine.comment_id.isin(test_items)]
     path = foldername3 + "/" + _id + "_test.json"
     convert_data_pldl_experiments(dfs_test,colLabels,'comment_id',path)
-    # generate_data_nn(dfs_test,foldername2,"test",label_dict,_id)
-
-    # train_items_nn = train_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # test_items_nn = test_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # dev_items_nn = dev_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
     annotators_parsed = pd.unique(dfs_combine["annotator_id"])
-    # annotators_parsed = annotators_parsed.rename(columns={0:'id'})
-    # annotators_parsed['Aindex'] = annotators_parsed.index
 
     annotators_array = np.full(len(annotators_parsed),-1)
     X_train = pd.unique(dfs_train['message'])
@@ -160,6 +107,7 @@ def main():
     generate_data_bert(dfs_train,foldername2,"train",label_dict,_id,X_train,annotators_array)
     generate_data_bert(dfs_test,foldername2,"test",label_dict,_id,X_test,annotators_array)
     generate_data_bert(dfs_dev,foldername2,"dev",label_dict,_id,X_dev,annotators_array)
+    move_disco_embed_to_co(foldername2,foldername3)
 
 
 def map_flag_to_full(short_name):

@@ -9,19 +9,12 @@ import json
 import argparse
 import os
 from sklearn.decomposition import PCA
-from helper_functions import convert_data_pldl_experiments
+from helper_functions import convert_data_pldl_experiments,move_disco_embed_to_co
 import random
 N_CLASSES = 8
 
 def main():
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("--input_x", help="Input X filename")
-    # parser.add_argument("--input_ground_truth", help="Ground truth")
-    # parser.add_argument("--input_mt_labels", help="Labels from MTruk")
 
-    # parser.add_argument("--id", help="Identifier")
-    # parser.add_argument("--foldername", help="Main Folder name")
-    # args = parser.parse_args()
     folder = '/home/cyril/DataDrive/Experiments/pldl/modeling_annotators_NN/datasets/labelMe_OriginalJan4'
     input_x = np.load("/home/cyril/DataDrive/Experiments/pldl/Datasets/LabelMe/data_train_vgg16.npy")
     input_gt = np.load("/home/cyril/DataDrive/Experiments/pldl/Datasets/LabelMe/labels_train.npy")
@@ -133,6 +126,8 @@ def main():
     labels = test_items.join(X_rows.set_index('message_id'),on='message_id')
     path = pldl_path + "labelMe_test.json"
     convert_data_pldl_experiments(labels,label_dict,'message_id',path)
+
+    move_disco_embed_to_co(folder,pldl_path)
 
 def filter_out_sampled(sampled_set,features):
     processed_rows = []

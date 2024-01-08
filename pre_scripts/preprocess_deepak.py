@@ -10,7 +10,7 @@ import json
 import argparse
 import os
 import numpy as np
-from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder
+from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder,move_disco_embed_to_co
 #from sentence_transformers import SentenceTransformer
 import sys
 sys.path.insert(0, 'utils/')
@@ -26,6 +26,38 @@ from sklearn.model_selection import train_test_split
 
 # Full python preprocess_deepak.py --input_raw_file1 /home/cyril/DataDrive/Experiments/pldl/Datasets/Deepak/toxicity_ratings.json --input_raw_file2 /home/cyril/DataDrive/Experiments/pldl/Datasets/Deepak/121922_classified_data_with_worker_hash.json --id TR --use_original_splits 1 --foldername1 datasets/TRFull/processed/modeling_annotator --foldername2 datasets/TRFull/processed/modeling_annotator_NN --foldername3 datasets/TRFull/processed/PLDL
 
+def deepak_process_line(file_name):
+    data_read = []
+    with open(file_name) as fh:
+        for line in fh:
+            data_read.append(json.loads(line))
+    return data_read
+
+def read_line_combo(dataset_raw,dataset_ids):
+    """
+    For each row in the dataset, we take the ratings and the data row, and then for each rating, we
+    create a new row with the data row and the rating
+    
+    :param dataset_raw: the raw data from the json file
+    :param dataset_ids: the list of dictionaries that contain the data for each line
+    :return: A dictionary of dictionaries.
+    """
+    results_set = {}
+    count = 0
+    ratings = []
+    for annotation_row,datarow in zip(dataset_raw,dataset_ids):
+        annotation_row = annotation_row['comment']
+        ratings = annotation_row['ratings']
+        del datarow['ratings']
+        result_row = []
+        for rating in ratings:
+            rating_row = {}
+            rating_row.update(datarow)
+            rating_row.update(rating)
+            results_set[count] = rating_row
+            count += 1
+
+    return results_set
 
 def main():
     parser = argparse.ArgumentParser()
@@ -141,40 +173,8 @@ def main():
     generate_data_bert(dfs_train,foldername2,"train",label_dict,"TR",X_train,annotators_array)
     generate_data_bert(dfs_test,foldername2,"test",label_dict,"TR",X_test,annotators_array)
     generate_data_bert(dfs_dev,foldername2,"dev",label_dict,"TR",X_dev,annotators_array)
+    move_disco_embed_to_co(foldername2,foldername3)
 
-
-def deepak_process_line(file_name):
-    data_read = []
-    with open(file_name) as fh:
-        for line in fh:
-            data_read.append(json.loads(line))
-    return data_read
-
-def read_line_combo(dataset_raw,dataset_ids):
-    """
-    For each row in the dataset, we take the ratings and the data row, and then for each rating, we
-    create a new row with the data row and the rating
-    
-    :param dataset_raw: the raw data from the json file
-    :param dataset_ids: the list of dictionaries that contain the data for each line
-    :return: A dictionary of dictionaries.
-    """
-    results_set = {}
-    count = 0
-    ratings = []
-    for annotation_row,datarow in zip(dataset_raw,dataset_ids):
-        annotation_row = annotation_row['comment']
-        ratings = annotation_row['ratings']
-        del datarow['ratings']
-        result_row = []
-        for rating in ratings:
-            rating_row = {}
-            rating_row.update(datarow)
-            rating_row.update(rating)
-            results_set[count] = rating_row
-            count += 1
-
-    return results_set
 
 def label_grouping_annotators(annotators,dframe_labels,label_dict): #dframe_data,col_tweet_text,col_tweet_ID,col_label):
     results = []

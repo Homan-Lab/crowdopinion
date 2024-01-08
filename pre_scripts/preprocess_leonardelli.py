@@ -10,7 +10,7 @@ import json
 import argparse
 import os
 import numpy as np
-from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert
+from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,move_disco_embed_to_co
 #from sentence_transformers import SentenceTransformer
 import sys
 sys.path.insert(0, 'utils/')
@@ -136,12 +136,6 @@ def main():
     convert_data_pldl_experiments(dfs_test,colLabels,'Mindex',path)
     generate_data_nn(dfs_test,foldername2,"test",label_dict,_id)
 
-    # train_items_nn = train_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # test_items_nn = test_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # dev_items_nn = dev_items.rename({'message_id': 'Mindex', 'worker_id': 'Aindex', 'label':'label_vector'}, axis=1) 
-    # annotators_parsed = pd.unique(dfs_combine['Aindex'])
-    # annotators_parsed = pd.DataFrame(annotators)
-    # annotators_parsed = annotators_parsed.rename(columns={0:'id'})
     annotators_parsed['Aindex'] = annotators_parsed.index
 
     annotators_array = np.full(len(annotators_parsed),-1)
@@ -152,7 +146,7 @@ def main():
     generate_data_bert(dfs_test,foldername2,"test",label_dict,"GE",X_test,annotators_array)
     generate_data_bert(dfs_dev,foldername2,"dev",label_dict,"GE",X_dev,annotators_array)
 
-
+    move_disco_embed_to_co(foldername2,foldername3)
 
 
 def label_grouping_annotators(annotators,dframe_labels,label_dict): #dframe_data,col_tweet_text,col_tweet_ID,col_label):

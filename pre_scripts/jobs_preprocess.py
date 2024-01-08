@@ -10,7 +10,7 @@ import json
 import argparse
 import os
 import numpy as np
-from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder
+from helper_functions import sentence_embedding,convert_data_pldl_experiments,generate_data_bert,create_folder,move_disco_embed_to_co
 #from sentence_transformers import SentenceTransformer
 import sys
 sys.path.insert(0, 'utils/')
@@ -149,6 +149,7 @@ def main():
     generate_data_bert(dfs_train,foldername2,"train",label_dict,id,X_train,annotators_array)
     generate_data_bert(dfs_test,foldername2,"test",label_dict,id,X_test,annotators_array)
     generate_data_bert(dfs_dev,foldername2,"dev",label_dict,id,X_dev,annotators_array)
+    move_disco_embed_to_co(foldername2,foldername3
 
 def csv_process_q3(dataset,question_col):
     processed_df = pd.DataFrame(columns=dataset.columns)
