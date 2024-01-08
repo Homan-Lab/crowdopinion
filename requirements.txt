@@ -1,0 +1,5 @@
+scikit-learn
+wandb
+seaborn
+matplotlib
+gensim
