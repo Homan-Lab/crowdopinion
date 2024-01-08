@@ -60,7 +60,7 @@ pooling_experiments()
 	local db=$4
 	local hybrid=$5
 
-	# python "$cluster_name"_train.py --train_file data/"$dataset_id"/processed/"$dataset"_train.json  --train_file_vects data/"$dataset_id"/bert_embeddings/X_train.npy --dev_file data/"$dataset_id"/processed/"$dataset"_dev.json --dev_file_vects data/"$dataset_id"/bert_embeddings/X_dev.npy --lower "$lower" --upper "$upper" --iterations 50 --output_file "$dataset"_split_"$cluster_name"  --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP" --nlp_data True --glove bert --hybrid "$hybrid"
+	python "$cluster_name"_train.py --train_file data/"$dataset_id"/processed/"$dataset"_train.json  --train_file_vects data/"$dataset_id"/bert_embeddings/X_train.npy --dev_file data/"$dataset_id"/processed/"$dataset"_dev.json --dev_file_vects data/"$dataset_id"/bert_embeddings/X_dev.npy --lower "$lower" --upper "$upper" --iterations 50 --output_file "$dataset"_split_"$cluster_name"  --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP" --nlp_data True --glove bert --hybrid "$hybrid"
 	upper=$((upper -1))
 	for topic in $(seq $lower $upper)
 	do
@@ -81,11 +81,11 @@ pooling_experiments()
 		
 }
 
-for hybrid in 50 #100 False #w parameter 50 75 25
+for hybrid in False 25 50 75 100 #w parameter 50 75 25
 do
 	declare results_db="$date"_HY"$hybrid""$dataset_id"Results
 	declare db="$date"_"$dataset_id"HY"$hybrid"
-	for Pooling in gmm #FMM lda gmm NBP None #NBP #gmm FMM lda kmeans #None #NBP lda kmeans gmm FMM None MaxEnt
+	for Pooling in lda gmm kmeans NBP FMM None MaxEnt
 	do
 
 		echo $Pooling
@@ -99,7 +99,7 @@ do
 		mkdir data/"$dataset"/"$EXP"/
 		if [ "$Pooling" == "NBP" ]; then
 
-			# python prep_experiments.py --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP"
+			python prep_experiments.py --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP"
 
 			for epsilon in $(seq 0.1 0.5 15)
 			do
@@ -115,13 +115,13 @@ do
 			
 		fi	
 		
-		# if [ "$Pooling" == "gmm" ] || [ "$Pooling" == "kmeans" ] || [ "$Pooling" == "lda" ]; then
-		# 	echo "Experiments on "$dataset
+		if [ "$Pooling" == "gmm" ] || [ "$Pooling" == "kmeans" ] || [ "$Pooling" == "lda" ]; then
+			echo "Experiments on "$dataset
 	
-			# python prep_experiments.py --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP"
-		# 	pooling_experiments $Pooling $EXP $results_db $db $hybrid
+			python prep_experiments.py --folder_name data/"$dataset_id"/processed/"$dataset"/"$EXP"
+			pooling_experiments $Pooling $EXP $results_db $db $hybrid
 
-		# fi
+		fi
 
 		if [ "$Pooling" == "FMM" ]; then
 			mkdir data/"$dataset_id"/processed/"$dataset"/"$EXP"/sample_test
