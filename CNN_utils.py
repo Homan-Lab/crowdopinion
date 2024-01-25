@@ -2,7 +2,7 @@
 import nltk, re, string, math, os, json, itertools
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from keras.utils import to_categorical, plot_model
+# from keras.utils import to_categorical, plot_model
 from gensim.models import LdaModel
 import pdb
 import tensorflow as tf
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pydot as pydot
 from gensim.corpora import Dictionary, MmCorpus
 from IPython.display import SVG
-from keras.utils.vis_utils import model_to_dot
+# from keras.utils.vis_utils import model_to_dot
 import keras
 from scipy.stats import entropy
 from sklearn import metrics

@@ -155,7 +155,7 @@ def write_results_to_wandb(model_file,model_type,score,acc,y_test_KL,y_test_Mis,
     results = defaultdict(list)
     model_info = defaultdict(list)
 
-    wandb.init(project=wandb_project, entity="rit_pl",name=dataset)
+    wandb.init(project=wandb_project,name=dataset)
     wandb.config = {
     "model": model_type,
     "model_path": model_file,
